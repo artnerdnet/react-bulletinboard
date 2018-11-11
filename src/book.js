@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-
+import { FaPencilAlt } from 'react-icons/fa';
+import { FaTrash } from 'react-icons/fa'
+import { FaSave } from 'react-icons/fa'
 
 class Book extends Component {
   constructor(props) {
@@ -12,6 +14,10 @@ class Book extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.renderDisplay = this.renderDisplay.bind(this);
+    this.renderForm = this.renderForm.bind(this);
+    this.edit = this.edit.bind(this);
+    this.remove = this.remove.bind(this)
   }
 
   handleChange(event) {
@@ -20,101 +26,121 @@ class Book extends Component {
     const name = target.name;
 
     this.setState({
-      [name]: value
+      [name]: value,
     });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log(this.state);
+    this.props.onChange(this.title.value, this.genre.value, this.price.value, this.props.index)
+    this.setState({
+        editing: false
+    })
   }
-
-  render() {
-    return (
-      <div className="Book">
-        <header>
-          <div className="container">
-            <nav className="navbar">
-              <div className="navbar-brand">
-                <span className="navbar-item">Book Manager</span>
-              </div>
-            </nav>
-          </div>
-        </header>
-        <div className="container">
-          <div className="columns">
-            <div className="column is-9">
-              <form className="form" onSubmit={this.handleSubmit}>
-                <div className="field">
-                  <label className="label">Title</label>
-                  <div className="control">
-                    <input
-                      className="input"
-                      type="text"
-                      name="title"
-                      value={this.state.title}
-                      onChange={this.handleChange}
-                    />
-                  </div>
+    edit() {
+        this.setState({
+            editing: true
+        })
+    }
+    remove() {
+        this.props.onRemove(this.props.index)
+        alert("Book removed")
+    }
+    renderForm() {
+        return (
+        <div className="Book">
+            <header>
+            <div className="container">
+                <nav className="navbar">
+                <div className="navbar-brand">
+                    <span className="navbar-item">Book Manager</span>
                 </div>
-
-                <div className="field">
-                  <label className="label">Price</label>
-                  <div className="control">
-                    <input
-                      className="input"
-                      type="number"
-                      name="price"
-                      value={this.state.price}
-                      onChange={this.handleChange}
-                    />
-                  </div>
-                </div>              
-
-                <div className="field">
-                  <label className="label">Genre</label>
-                  <div className="control">
-                    <div className="select">
-                      <select
-                        value={this.state.genre}
-                        name="genre"
+                </nav>
+            </div>
+            </header>
+            <div className="container">
+            <div className="columns">
+                <div className="column is-9">
+                <form className="form" onSubmit={this.handleSubmit}>
+                    <div className="field">
+                    <label className="label">Title</label>
+                    <div className="control">
+                        <input
+                        className="input"
+                        type="text"
+                        name="title"
+                        value={this.state.title}
                         onChange={this.handleChange}
-                      >
-                        <option value="adventure">Adventure</option>
-                        <option value="classics">Classics</option>
-                        <option value="fantasty">Fantasty</option>
-                        <option value="horror">Horror</option>
-                        <option value="romance">Romance</option>
-                        <option value="scifi">Sci-Fi</option>
-                      </select>
+                        ref={input => this.title = input }
+                        />
                     </div>
-                  </div>
-                </div>                
+                    </div>
 
-                <div className="field">
-                  <div className="control">
-                    <input
-                      type="submit"
-                      value="Submit"
-                      className="button is-primary"
-                    />
-                  </div>
+                    <div className="field">
+                    <label className="label">Price</label>
+                    <div className="control">
+                        <input
+                        className="input"
+                        type="number"
+                        name="price"
+                        value={this.state.price}
+                        onChange={this.handleChange}
+                        ref={input => this.price = input }
+                        />
+                    </div>
+                    </div>              
+
+                    <div className="field">
+                    <label className="label">Genre</label>
+                    <div className="control">
+                        <div className="select">
+                        <select
+                            value={this.state.genre}
+                            name="genre"
+                            onChange={this.handleChange}
+                            ref={input => this.genre = input }
+                        >
+                            <option value="adventure">Adventure</option>
+                            <option value="classics">Classics</option>
+                            <option value="fantasty">Fantasty</option>
+                            <option value="horror">Horror</option>
+                            <option value="romance">Romance</option>
+                            <option value="scifi">Sci-Fi</option>
+                        </select>
+                        </div>
+                    </div>
+                    </div>                
+
+                    <div className="field">
+                    <div className="control">
+                        <input
+                        type="submit"
+                        value="Submit"
+                        className="button is-primary"
+                        />
+                    </div>
+                    </div>
+                </form>
                 </div>
-              </form>
+                
             </div>
-            <div className="column is-3">
-              <pre>
-                <code>
-                  <p>Title: {this.state.title}</p>
-                  <p>Price: {this.state.price}</p>
-                  <p>Genre: {this.state.genre}</p>
-                </code>
-              </pre>
             </div>
-          </div>
         </div>
-      </div>
-    );
+        );
+    }
+    renderDisplay() {
+        return (
+            <div className="book">
+                <p>{this.props.children}</p>
+                <span>
+                    <button onClick={this.edit} id="edit"><FaPencilAlt /></button>
+                    <button onClick={this.remove} id="remove"><FaTrash /></button>
+                </span>
+            </div>
+        )
+    }
+  render() {
+    return this.state.editing ? this.renderForm() : this.renderDisplay()
   }
 }
 

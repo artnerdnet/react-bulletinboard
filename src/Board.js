@@ -16,17 +16,15 @@ class Board extends Component {
 		this.nextId = this.nextId.bind(this)
 	}
 
-	add(title, price, genre) {
+	add(text) {
 		this.setState(prevState => ({
 			books: [
 				...prevState.books,
 				{
 					id: this.nextId(),
-					book: [
-						title,
-						price,
-						genre
-					]
+					title: null,
+					genre: null,
+					price: null,
 				}
 			]
 		}))
@@ -40,7 +38,7 @@ class Board extends Component {
 	update(title, genre, price, i) {
 		this.setState(prevState => ({
 			books: prevState.books.map(
-				book => (book.id !== i) ? book : {...book, book: title, genre, price}
+				book => (book.id !== i) ? book : {...book, title: title, genre: genre, price: price}
 			)
 		}))
 	}
@@ -57,7 +55,9 @@ class Board extends Component {
 				  index={i}
 				  onChange={this.update}
 				  onRemove={this.remove}>
-				  {book.book}
+				  {book.title}
+				  {book.price}
+				  {book.genre}
 		    </ Book>
 		)
 	}
@@ -66,7 +66,7 @@ class Board extends Component {
 		return (
 			<div className="board">
 				{this.state.books.map(this.eachBook)}
-				<button onClick={this.add.bind(null, "New Note")}
+				<button onClick={this.add.bind(null, "New Book")}
 						id="add">
 					<FaPlus />
 				</button>
