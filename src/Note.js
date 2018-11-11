@@ -7,7 +7,11 @@ class Note extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            editing: false
+            editing: false,
+            title: "",
+            genre: "",
+            price: "",
+            text: 0,
         }
         this.edit = this.edit.bind(this)
         this.remove = this.remove.bind(this)
@@ -34,9 +38,53 @@ class Note extends Component {
         return (
             <div className="note">
                 <form onSubmit={this.save}>
-                    <textarea ref={input => this._newText = input }/>
-                    <button onClick={this.save}><FaSave /></button>
-                </form>
+                <label>
+          Is going:
+          <input
+            name="isGoing"
+            type="checkbox"
+            checked={this.state.isGoing}
+            />
+        </label>
+        <br />
+        <label>
+          Number of guests:
+          <input
+            name="numberOfGuests"
+            type="number"
+            value={this.state.numberOfGuests}
+            />
+        </label>
+        <br />
+        <label>
+          Title:
+          <input
+            name="title"
+            type="text"
+            value={this.state.title}            
+           />
+        </label>
+        <br />
+        <label>
+          Genre:
+          <input
+            name="genre"
+            type="text"
+            value={this.state.genre}
+           />
+        </label>
+        <br />
+        <label>
+          Price:
+          <input
+            name="price"
+            type="number"
+            value={this.state.price}
+           />
+        </label>
+        <textarea className="text" ref={input => this._newText = input }/>
+        <button onClick={this.save}><FaSave /></button>
+        </form>
             </div>
         )
     }

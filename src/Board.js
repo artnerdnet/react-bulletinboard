@@ -1,27 +1,32 @@
 import React, { Component } from 'react'
 import Note from './Note'
+import Book from './book'
 import { FaPlus } from 'react-icons/fa'
 
 class Board extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			notes: []
+			books: []
 		}
 		this.add = this.add.bind(this)
-		this.eachNote = this.eachNote.bind(this)
+		this.eachBook = this.eachBook.bind(this)
 		this.update = this.update.bind(this)
 		this.remove = this.remove.bind(this)
 		this.nextId = this.nextId.bind(this)
 	}
 
-	add(text) {
+	add(title, price, genre) {
 		this.setState(prevState => ({
-			notes: [
-				...prevState.notes,
+			books: [
+				...prevState.books,
 				{
 					id: this.nextId(),
-					note: text
+					book: [
+						title,
+						price,
+						genre
+					]
 				}
 			]
 		}))
@@ -32,35 +37,35 @@ class Board extends Component {
 		return this.uniqueId++
 	}
 
-	update(newText, i) {
+	update(title, genre, price, i) {
 		this.setState(prevState => ({
-			notes: prevState.notes.map(
-				note => (note.id !== i) ? note : {...note, note: newText}
+			books: prevState.books.map(
+				book => (book.id !== i) ? book : {...book, book: title, genre, price}
 			)
 		}))
 	}
 
 	remove(id) {
 		this.setState(prevState => ({
-			notes: prevState.notes.filter(note => note.id !== id)
+			books: prevState.books.filter(book => book.id !== id)
 		}))
 	}
 
-	eachNote(note, i) {
+	eachBook(book, i) {
 		return (
-			<Note key={i}
+			<Book key={i}
 				  index={i}
 				  onChange={this.update}
 				  onRemove={this.remove}>
-				  {note.note}
-		    </Note>
+				  {book.book}
+		    </ Book>
 		)
 	}
 
 	render() {
 		return (
 			<div className="board">
-				{this.state.notes.map(this.eachNote)}
+				{this.state.books.map(this.eachBook)}
 				<button onClick={this.add.bind(null, "New Note")}
 						id="add">
 					<FaPlus />
